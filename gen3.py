@@ -64,13 +64,13 @@ def get_diverse_solution(problem: str, answer_string: str, approach_num: int) ->
        print(f"Error generating solution for approach {approach_num + 1}: {str(e)}")
        return None
 
-def process_questions(questions: List[Dict], num_approaches: int = 5) -> None:
+def process_questions(questions: List[Dict], num_approaches: int = 5, start_idx: int = 0, end_idx: int = 8000) -> None:
    solutions = []
-   file_count = 20 # Start from batch 20 for questions 2001-4000 
+   file_count = 200 # Start from batch 20 for questions 2001-4000 
    total_solutions = 0
    
    for q_idx, question in enumerate(questions):
-       print(f"\nProcessing question {q_idx + 2001}/{4000}") # Adjusted indices
+       print(f"\nProcessing question {q_idx + start_idx}/{end_idx}") # Adjusted indices
        
        for approach in range(num_approaches):
            print(f"  Generating approach {approach + 1}/{num_approaches}...")
@@ -100,7 +100,7 @@ def process_questions(questions: List[Dict], num_approaches: int = 5) -> None:
                    solutions = []
                    file_count += 1
                    
-           time.sleep(1)
+           time.sleep(0.25)
    
    if solutions:
        output_file = f"gsm8k_solutions_batch_{file_count}.json"
@@ -142,7 +142,7 @@ def main():
    questions = load_questions(file_path, START_IDX, END_IDX)
    print(f"Loaded questions {START_IDX + 1} to {END_IDX}")
    
-   process_questions(questions, NUM_APPROACHES)
+   process_questions(questions, NUM_APPROACHES, START_IDX, END_IDX)
 
 if __name__ == "__main__":
    main()
