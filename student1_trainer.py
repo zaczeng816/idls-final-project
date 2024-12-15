@@ -3,9 +3,15 @@ from transformers import (
     AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments,
     DataCollatorForSeq2Seq
 )
+from peft import get_peft_model, LoraConfig, TaskType
 from config import Config, ReasoningExample, ConsistencyProcessor
 from typing import Dict, List
+import evaluate
+import numpy as np
 import json
+from huggingface_hub import login
+import wandb
+wandb.init(mode="offline")
 
 class Student1Dataset(torch.utils.data.Dataset):
     def __init__(self, examples: List[ReasoningExample], tokenizer):
@@ -43,15 +49,28 @@ def load_data(file_path: str) -> List[ReasoningExample]:
         data = [json.loads(line) for line in f]
     examples = [ReasoningExample(item) for item in data]
     
-    # Apply consistency filtering
-    processor = ConsistencyProcessor()
-    filtered = processor.filter_dataset(examples)
-    return filtered
+    # # Apply consistency filtering
+    # processor = ConsistencyProcessor()
+    # filtered = processor.filter_dataset(examples)
+    # return filtered
+
+    return examples
+
 
 def train_student1(config: Config):
     # Initialize model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(config.student1_model)
     model = AutoModelForCausalLM.from_pretrained(config.student1_model)
+
+    # Add LoRA to the model
+    lora_config = LoraConfig(
+        task_type=TaskType.CAUSAL_LM, 
+        r=8,                          # LoRA rank
+        lora_alpha=32,                # Scaling factor
+        lora_dropout=0.1,             # Dropout probability
+        inference_mode=False          # Training mode
+    )
+    model = get_peft_model(model, lora_config)
     
     # Load and process data
     train_examples = load_data(config.train_file)
@@ -72,7 +91,7 @@ def train_student1(config: Config):
         eval_steps=500,
         save_steps=500,
         load_best_model_at_end=True,
-        fp16=True
+        fp16=False
     )
     
     # Initialize trainer
@@ -82,15 +101,29 @@ def train_student1(config: Config):
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
         tokenizer=tokenizer,
+        # compute_metrics=lambda eval_preds: compute_metrics(eval_preds, tokenizer),
         data_collator=DataCollatorForSeq2Seq(tokenizer, model=model)
     )
     
     # Train and save
     trainer.train()
     trainer.save_model(config.output_dir_student1)
+
+    # Evaluate
+    eval_results = trainer.evaluate()
+    print("Evaluation Results:")
+    for key, value in eval_results.items():
+        print(f"{key}: {value}")
     
     return trainer
 
 if __name__ == "__main__":
     config = Config()
+
+    # Authenticate with the Hugging Face Hub
+    token = config.token
+    login(token=token)
+    print("Logged in successfully!")
+
+    # Train model
     trainer = train_student1(config)

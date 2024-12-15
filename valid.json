@@ -1,0 +1,60 @@
+{
+    "pairs": [
+        {
+            "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+            "reasoning": "Sure! Let's think about this problem using a real-world example that might be easier to understand.\n\nImagine Natalia is selling clips, which are like hair accessories, to her friends. In April, she was very successful and sold clips to 48 of her friends. That's a lot of friends!\n\nNow, let's move to May. In May, Natalia wasn't as successful as she was in April. She sold half as many clips as she did in April. To figure out how many clips she sold in May, we need to take the number of clips she sold in April and divide it by 2.\n\nSo, let's do the math:\n- Number of clips sold in April: 48\n- Number of clips sold in May: \\( \\frac{48}{2} = 24 \\)\n\nNow, to find out how many clips Natalia sold altogether in April and May, we add the number of clips sold in April to the number of clips sold in May:\n- Total clips sold = Clips sold in April + Clips sold in May\n- Total clips sold = 48 + 24 = 72\n\nSo, Natalia sold a total of 72 clips in April and May.\n\nTo make it even more relatable, imagine if you had 48 cookies and you gave half of them away in May. You would have given away 24 cookies in May. If you add the cookies you gave away in April (48) to the cookies you gave away in May (24), you would have given away a total of 72 cookies. This is just like Natalia giving away clips to her friends!",
+            "predict_answer": 72.0,
+            "correct_answer": 72.0,
+            "approach_info": {
+                "number": 2,
+                "type": "Imagine teaching this to a student who learns best through real-world examples"
+            }
+        },
+        {
+            "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+            "reasoning": "Certainly! Let's break down the problem of calculating Weng's earnings from babysitting into the smallest possible steps, explaining each detail thoroughly.\n\n### Step 1: Identify the given information\n- Weng earns $12 per hour.\n- She babysat for 50 minutes yesterday.\n\n### Step 2: Convert the babysitting time from minutes to hours\n- There are 60 minutes in one hour.\n- To convert 50 minutes to hours, we need to divide 50 by 60.\n\n\\[ \\text{Hours} = \\frac{50 \\text{ minutes}}{60 \\text{ minutes/hour}} \\]\n\n### Step 3: Perform the division\n- Divide 50 by 60:\n\n\\[ \\frac{50}{60} = \\frac{5}{6} \\]\n\n- To convert this fraction to a decimal, divide 5 by 6:\n\n\\[ \\frac{5}{6} \\approx 0.8333 \\text{ hours} \\]\n\n### Step 4: Calculate the earnings\n- Weng earns $12 per hour.\n- To find out how much she earned for 0.8333 hours, multiply her hourly rate by the number of hours:\n\n\\[ \\text{Earnings} = 12 \\text{ dollars/hour} \\times 0.8333 \\text{ hours} \\]\n\n### Step 5: Perform the multiplication\n- Multiply 12 by 0.8333:\n\n\\[ 12 \\times 0.8333 \\approx 9.9996 \\]\n\n### Step 6: Round the result\n- Since money is typically rounded to the nearest cent, we round 9.9996 to the nearest cent:\n\n\\[ 9.9996 \\approx 10.00 \\]\n\n### Final Answer\nWeng earned $10.00 from babysitting for 50 minutes.\n\nBy breaking down the problem into these small, detailed steps, we can see exactly how the calculation is performed and understand each part of the process.",
+            "predict_answer": 50.0,
+            "correct_answer": 10.0,
+            "approach_info": {
+                "number": 3,
+                "type": "Break this down into the smallest possible steps, explaining each tiny detail:"
+            }
+        },
+        {
+            "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+            "reasoning": "Let's break down Betty's situation step by step using a real-world example to make it easier to understand.\n\n### Step 1: Determine How Much Betty Currently Has\nBetty needs $100 to buy the wallet. She currently has half of this amount. \n\n- **Half of $100** is calculated as:\n  \\[\n  \\frac{100}{2} = 50\n  \\]\n\nSo, Betty currently has $50.\n\n### Step 2: Calculate the Contribution from Betty's Parents\nBetty's parents decided to give her $15. This is a straightforward addition to her current savings.\n\n### Step 3: Calculate the Contribution from Betty's Grandparents\nBetty's grandparents decided to give her twice as much as her parents. Since her parents gave her $15, we calculate the grandparents' contribution as:\n\\[\n2 \\times 15 = 30\n\\]\n\n### Step 4: Add Up All the Contributions\nNow, let's add up all the money Betty has, including her initial savings and the contributions from her parents and grandparents:\n\\[\n50 \\, (\\text{initial savings}) + 15 \\, (\\text{parents' contribution}) + 30 \\, (\\text{grandparents' contribution}) = 95\n\\]\n\n### Step 5: Determine How Much More Money Betty Needs\nBetty needs $100 to buy the wallet, and she now has $95. The amount of money she still needs is:\n\\[\n100 - 95 = 5\n\\]\n\n### Real-World Example\nImagine Betty is saving up for a special birthday gift. She has a piggy bank where she keeps her savings. She already has $50 in her piggy bank. Her parents, knowing how much she wants the gift, decide to help by giving her $15. Her grandparents, who are even more generous, give her twice as much as her parents, which is $30. When she counts all the money in her piggy bank, she has $95. She needs just a little more, only $5, to reach her goal of $100.\n\n### Final Answer\nBetty needs **$5** more to buy the wallet.",
+            "predict_answer": 5.0,
+            "correct_answer": 5.0,
+            "approach_info": {
+                "number": 2,
+                "type": "Imagine teaching this to a student who learns best through real-world examples"
+            }
+        },
+        {
+            "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+            "reasoning": "Certainly! Let's break down this problem into the smallest possible steps to understand how to find the total number of clips Natalia sold in April and May.\n\n### Step 1: Identify the number of clips sold in April\n- Natalia sold 48 clips in April.\n  - This is given directly in the problem.\n\n### Step 2: Determine the number of clips sold in May\n- The problem states that Natalia sold \"half as many clips in May\" as she did in April.\n  - To find half of the number of clips sold in April, we need to divide the number of clips sold in April by 2.\n  - Calculation: \\( \\frac{48}{2} = 24 \\)\n  - So, Natalia sold 24 clips in May.\n\n### Step 3: Add the number of clips sold in April and May\n- To find the total number of clips sold in both months, we add the number of clips sold in April to the number of clips sold in May.\n  - Calculation: \\( 48 + 24 = 72 \\)\n\n### Step 4: State the final answer\n- Natalia sold a total of 72 clips in April and May.\n\nSo, the final answer is **72 clips**.",
+            "predict_answer": 72.0,
+            "correct_answer": 72.0,
+            "approach_info": {
+                "number": 3,
+                "type": "Break this down into the smallest possible steps, explaining each tiny detail:"
+            }
+        },
+        {
+            "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+            "reasoning": "To solve this problem using algebra and mathematical notation, let's break down the information and then set up an equation to represent the total number of pages James writes in a year.\n\n### Step 1: Identify the given information\n- James writes a 3-page letter to each of his 2 friends.\n- He writes these letters twice a week.\n- We need to find the total number of pages he writes in a year.\n\n### Step 2: Define the variables\nLet:\n- \\( P \\) be the number of pages in each letter.\n- \\( F \\) be the number of friends.\n- \\( W \\) be the number of times he writes the letters each week.\n- \\( Y \\) be the number of weeks in a year.\n\nFrom the problem:\n- \\( P = 3 \\) (pages per letter)\n- \\( F = 2 \\) (friends)\n- \\( W = 2 \\) (times per week)\n- \\( Y = 52 \\) (weeks in a year)\n\n### Step 3: Set up the equation\nThe total number of pages James writes in a week can be calculated as:\n\\[ \\text{Pages per week} = P \\times F \\times W \\]\n\nSubstitute the given values:\n\\[ \\text{Pages per week} = 3 \\times 2 \\times 2 = 12 \\text{ pages} \\]\n\nThe total number of pages James writes in a year is:\n\\[ \\text{Total pages per year} = \\text{Pages per week} \\times Y \\]\n\nSubstitute the values:\n\\[ \\text{Total pages per year} = 12 \\times 52 \\]\n\n### Step 4: Calculate the total\n\\[ \\text{Total pages per year} = 12 \\times 52 = 624 \\]\n\n### Step 5: Conclusion\nJames writes a total of 624 pages in a year.\n\nThus, the total number of pages James writes in a year is \\(\\boxed{624}\\).",
+            "predict_answer": 624.0,
+            "correct_answer": 624.0,
+            "approach_info": {
+                "number": 4,
+                "type": "Solve this using algebra and mathematical notation, showing your work clearly:"
+            }
+        }
+    ],
+    "metadata": {
+        "num_questions": 4,
+        "num_approaches_per_question": 5,
+        "total_solutions": 5,
+        "split_type": "validation"
+    }
+}

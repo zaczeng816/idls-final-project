@@ -1,0 +1,210 @@
+{
+    "pairs": [
+        {
+            "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+            "reasoning": "To solve this problem using algebra and mathematical notation, we can follow these steps:\n\n1. **Define the variable:**\n   Let \\( C \\) represent the number of clips Natalia sold in April.\n\n2. **Given information:**\n   - Natalia sold 48 clips in April.\n   - She sold half as many clips in May as she did in April.\n\n3. **Express the number of clips sold in May:**\n   Since she sold half as many clips in May as in April, the number of clips sold in May can be represented as \\( \\frac{C}{2} \\).\n\n4. **Substitute the known value:**\n   We know from the problem that \\( C = 48 \\). Therefore, the number of clips sold in May is \\( \\frac{48}{2} \\).\n\n5. **Calculate the number of clips sold in May:**\n   \\[\n   \\frac{48}{2} = 24\n   \\]\n\n6. **Calculate the total number of clips sold in April and May:**\n   The total number of clips sold is the sum of the clips sold in April and the clips sold in May:\n   \\[\n   C + \\frac{C}{2} = 48 + 24\n   \\]\n\n7. **Perform the addition:**\n   \\[\n   48 + 24 = 72\n   \\]\n\nTherefore, Natalia sold a total of 72 clips in April and May.",
+            "predict_answer": 72.0,
+            "correct_answer": 72.0,
+            "approach_info": {
+                "number": 4,
+                "type": "Solve this using algebra and mathematical notation, showing your work clearly:"
+            }
+        },
+        {
+            "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+            "reasoning": "Sure! Let's think about Weng's babysitting earnings in a way that relates to everyday situations.\n\n### Step 1: Understand the Problem\nWeng earns $12 for every hour she babysits. Yesterday, she babysat for 50 minutes. We need to find out how much she earned for those 50 minutes.\n\n### Step 2: Convert Minutes to Hours\nSince Weng's pay is given in hours, we need to convert the 50 minutes into hours. \n\n1 hour = 60 minutes\n\nSo, to find out how many hours 50 minutes is, we divide 50 by 60:\n\n\\[ \\text{Hours} = \\frac{50 \\text{ minutes}}{60 \\text{ minutes/hour}} = \\frac{5}{6} \\text{ hours} \\]\n\n### Step 3: Calculate the Earnings\nNow, we need to find out how much Weng earns for \\(\\frac{5}{6}\\) of an hour. \n\nWeng earns $12 per hour. So, for \\(\\frac{5}{6}\\) of an hour, her earnings are:\n\n\\[ \\text{Earnings} = 12 \\text{ dollars/hour} \\times \\frac{5}{6} \\text{ hours} \\]\n\n### Step 4: Perform the Multiplication\nLet's do the multiplication:\n\n\\[ \\text{Earnings} = 12 \\times \\frac{5}{6} \\]\n\nTo simplify, we can cancel out the 6 in the denominator with the 12 in the numerator:\n\n\\[ \\text{Earnings} = 2 \\times 5 = 10 \\text{ dollars} \\]\n\n### Step 5: Conclusion\nWeng earned $10 for the 50 minutes of babysitting she did yesterday.\n\n### Real-World Example\nImagine you have a lemonade stand and you charge $12 for a full hour of standing and selling lemonade. If you only stand for 50 minutes, how much should you charge? Just like Weng, you would charge $10 for 50 minutes of work. This is because 50 minutes is \\(\\frac{5}{6}\\) of an hour, and \\(\\frac{5}{6}\\) of $12 is $10.\n\nSo, Weng earned **$10** for her 50 minutes of babysitting.",
+            "predict_answer": 50.0,
+            "correct_answer": 10.0,
+            "approach_info": {
+                "number": 2,
+                "type": "Imagine teaching this to a student who learns best through real-world examples"
+            }
+        },
+        {
+            "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+            "reasoning": "Let's break down the problem using a real-world example to make it easier to understand. Imagine Julie is reading a book that's as thick as a common magazine, like a 120-page magazine.\n\n1. **Understanding the Initial Situation:**\n   - Julie has a 120-page book to read.\n   - Yesterday, she read 12 pages. This is like finishing a short article in the magazine.\n\n2. **Pages Read Today:**\n   - Today, she read twice as many pages as she did yesterday. Since she read 12 pages yesterday, today she read:\n     \\[\n     2 \\times 12 = 24 \\text{ pages}\n     \\]\n   - This is like reading two articles that are the same length as the one she read yesterday.\n\n3. **Calculating the Total Pages Read So Far:**\n   - So far, Julie has read:\n     \\[\n     12 \\text{ pages (yesterday)} + 24 \\text{ pages (today)} = 36 \\text{ pages}\n     \\]\n   - This is like reading a small section of the magazine.\n\n4. **Pages Remaining to Read:**\n   - The total number of pages in the book is 120. After reading 36 pages, the number of pages left is:\n     \\[\n     120 - 36 = 84 \\text{ pages}\n     \\]\n   - This is like having most of the magazine left to read.\n\n5. **Reading Half of the Remaining Pages Tomorrow:**\n   - Julie wants to read half of the remaining pages tomorrow. Half of 84 pages is:\n     \\[\n     \\frac{84}{2} = 42 \\text{ pages}\n     \\]\n   - This is like planning to read a significant section of the magazine, but not the entire remaining part.\n\nSo, Julie should read **42 pages** tomorrow. This way, she will continue making good progress through her book, similar to how you might plan to read a large part of a magazine but not all of it in one sitting.",
+            "predict_answer": 42.0,
+            "correct_answer": 42.0,
+            "approach_info": {
+                "number": 2,
+                "type": "Imagine teaching this to a student who learns best through real-world examples"
+            }
+        },
+        {
+            "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+            "reasoning": "Let's solve this problem step-by-step using estimation and rounding first, and then solving it exactly. We'll compare the two approaches to ensure accuracy and understand the process better.\n\n### Step 1: Estimation and Rounding\n\n1. **Cost of the wallet**: $100\n2. **Money Betty has**: Half of $100, which is $50.\n3. **Money from her parents**: $15\n4. **Money from her grandparents**: Twice as much as her parents, which is \\(2 \\times 15 = 30\\).\n\nNow, let's estimate the total amount of money Betty will have after receiving the contributions from her parents and grandparents:\n- Initial amount: $50\n- Contribution from parents: $15\n- Contribution from grandparents: $30\n\nEstimate the total:\n\\[ 50 + 15 + 30 = 95 \\]\n\nSo, Betty will have approximately $95. The cost of the wallet is $100, so she will need:\n\\[ 100 - 95 = 5 \\]\n\nEstimation suggests that Betty needs about $5 more.\n\n### Step 2: Exact Calculation\n\n1. **Cost of the wallet**: $100\n2. **Money Betty has**: Half of $100, which is $50.\n3. **Money from her parents**: $15\n4. **Money from her grandparents**: \\(2 \\times 15 = 30\\)\n\nNow, let's calculate the total amount of money Betty will have after receiving the contributions:\n\\[ 50 + 15 + 30 = 95 \\]\n\nSo, Betty will have exactly $95. The cost of the wallet is $100, so she will need:\n\\[ 100 - 95 = 5 \\]\n\n### Conclusion\n\nBoth the estimation and exact calculation methods yield the same result. Betty needs exactly $5 more to buy the wallet.\n\n### Final Answer\nBetty needs \\(\\boxed{5}\\) more dollars to buy the wallet.",
+            "predict_answer": 5.0,
+            "correct_answer": 5.0,
+            "approach_info": {
+                "number": 5,
+                "type": "Use estimation and rounding first, then solve exactly, comparing the approaches:"
+            }
+        },
+        {
+            "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+            "reasoning": "Certainly! Let's break down the problem step by step to find out how many pages James writes in a year.\n\n### Step 1: Determine the number of pages written per week\nJames writes a 3-page letter to each of 2 different friends, and he does this twice a week.\n\n- Pages per letter: 3 pages\n- Number of friends: 2\n- Number of times per week: 2\n\nFirst, calculate the total number of pages written to one friend in one week:\n\\[ 3 \\text{ pages/letter} \\times 2 \\text{ times/week} = 6 \\text{ pages/week per friend} \\]\n\nNext, calculate the total number of pages written to both friends in one week:\n\\[ 6 \\text{ pages/week per friend} \\times 2 \\text{ friends} = 12 \\text{ pages/week} \\]\n\n### Step 2: Determine the number of weeks in a year\nThere are 52 weeks in a year.\n\n### Step 3: Calculate the total number of pages written in a year\nNow, multiply the number of pages written per week by the number of weeks in a year:\n\\[ 12 \\text{ pages/week} \\times 52 \\text{ weeks/year} = 624 \\text{ pages/year} \\]\n\n### Final Answer\nJames writes a total of 624 pages a year.",
+            "predict_answer": 624.0,
+            "correct_answer": 624.0,
+            "approach_info": {
+                "number": 1,
+                "type": "Solve this step by step, showing each calculation clearly and explaining your reasoning:"
+            }
+        },
+        {
+            "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+            "reasoning": "Certainly! Let's solve this problem step by step, showing all the calculations and explanations clearly.\n\n### Step 1: Determine how much money Betty currently has.\n- The wallet costs $100.\n- Betty has only half of the money she needs.\n\n\\[ \\text{Money Betty has} = \\frac{100}{2} = 50 \\]\n\nSo, Betty currently has $50.\n\n### Step 2: Calculate the amount of money Betty's parents give her.\n- Her parents give her $15.\n\n\\[ \\text{Money from parents} = 15 \\]\n\n### Step 3: Calculate the amount of money Betty's grandparents give her.\n- Her grandparents give her twice as much as her parents.\n\n\\[ \\text{Money from grandparents} = 2 \\times 15 = 30 \\]\n\n### Step 4: Determine the total amount of money Betty has after receiving money from her parents and grandparents.\n- Add the money from her parents and grandparents to the money she already has.\n\n\\[ \\text{Total money Betty has} = 50 + 15 + 30 = 95 \\]\n\n### Step 5: Calculate how much more money Betty needs to buy the wallet.\n- Subtract the total amount of money Betty has from the cost of the wallet.\n\n\\[ \\text{Money needed} = 100 - 95 = 5 \\]\n\n### Final Answer:\nBetty needs \\(\\boxed{5}\\) more dollars to buy the wallet.",
+            "predict_answer": 5.0,
+            "correct_answer": 5.0,
+            "approach_info": {
+                "number": 1,
+                "type": "Solve this step by step, showing each calculation clearly and explaining your reasoning:"
+            }
+        },
+        {
+            "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+            "reasoning": "To solve this problem using algebra and mathematical notation, we will follow these steps:\n\n1. **Determine the total number of pages read so far.**\n2. **Calculate the remaining pages to be read.**\n3. **Determine how many pages Julie will read tomorrow, which is half of the remaining pages.**\n\nLet's break it down step by step.\n\n### Step 1: Determine the total number of pages read so far\n\nJulie read 12 pages yesterday. Today, she read twice as many pages as yesterday. Therefore, the number of pages she read today is:\n\\[ 2 \\times 12 = 24 \\text{ pages} \\]\n\nThe total number of pages read so far is:\n\\[ 12 + 24 = 36 \\text{ pages} \\]\n\n### Step 2: Calculate the remaining pages to be read\n\nThe book has a total of 120 pages. The number of pages remaining to be read is:\n\\[ 120 - 36 = 84 \\text{ pages} \\]\n\n### Step 3: Determine how many pages Julie will read tomorrow\n\nJulie wants to read half of the remaining pages tomorrow. Therefore, the number of pages she will read tomorrow is:\n\\[ \\frac{84}{2} = 42 \\text{ pages} \\]\n\n### Conclusion\n\nJulie should read \\(\\boxed{42}\\) pages tomorrow.",
+            "predict_answer": 42.0,
+            "correct_answer": 42.0,
+            "approach_info": {
+                "number": 4,
+                "type": "Solve this using algebra and mathematical notation, showing your work clearly:"
+            }
+        },
+        {
+            "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+            "reasoning": "Let's approach this problem step-by-step, first by estimation and rounding, and then by solving it exactly.\n\n### Step 1: Estimation and Rounding\n\n1. **Estimate the time:**\n   - Weng babysat for 50 minutes. This is just under an hour, so we can estimate it as approximately 1 hour.\n\n2. **Estimate the earnings:**\n   - If Weng earns $12 per hour, and we estimate she worked for 1 hour, her earnings would be approximately $12.\n\n### Step 2: Exact Calculation\n\n1. **Convert minutes to hours:**\n   - Weng babysat for 50 minutes. To convert this time into hours, we divide by 60 (since there are 60 minutes in an hour):\n     \\[\n     \\text{Time in hours} = \\frac{50 \\text{ minutes}}{60 \\text{ minutes/hour}} = \\frac{50}{60} = \\frac{5}{6} \\text{ hours}\n     \\]\n\n2. **Calculate the exact earnings:**\n   - Weng earns $12 per hour. To find out how much she earned for \\(\\frac{5}{6}\\) of an hour, we multiply her hourly rate by \\(\\frac{5}{6}\\):\n     \\[\n     \\text{Earnings} = 12 \\text{ dollars/hour} \\times \\frac{5}{6} \\text{ hours} = 12 \\times \\frac{5}{6} = 12 \\times 0.8333 = 10 \\text{ dollars}\n     \\]\n\n### Step 3: Compare the Approaches\n\n- **Estimation Result:** Approximately $12\n- **Exact Result:** $10\n\n### Conclusion\n\nBy using estimation, we approximated Weng's earnings to be $12, which is a bit higher than the exact amount. The exact calculation shows that Weng earned $10 for 50 minutes of babysitting. This demonstrates how estimation can provide a quick, but not always precise, answer, while exact calculations give the precise amount.",
+            "predict_answer": 50.0,
+            "correct_answer": 10.0,
+            "approach_info": {
+                "number": 5,
+                "type": "Use estimation and rounding first, then solve exactly, comparing the approaches:"
+            }
+        },
+        {
+            "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+            "reasoning": "Certainly! Let's break down the problem into the smallest possible steps and explain each tiny detail.\n\n### Step 1: Determine the total cost of the wallet.\n- The wallet costs $100.\n\n### Step 2: Determine how much money Betty currently has.\n- Betty has half of the money she needs.\n- Half of $100 is calculated as:\n  \\[\n  \\frac{100}{2} = 50\n  \\]\n- So, Betty currently has $50.\n\n### Step 3: Determine how much money Betty's parents will give her.\n- Betty's parents give her $15.\n\n### Step 4: Determine how much money Betty's grandparents will give her.\n- Betty's grandparents give her twice as much as her parents.\n- Twice $15 is calculated as:\n  \\[\n  2 \\times 15 = 30\n  \\]\n- So, Betty's grandparents give her $30.\n\n### Step 5: Calculate the total amount of money Betty will receive from her parents and grandparents.\n- The total amount from her parents and grandparents is:\n  \\[\n  15 + 30 = 45\n  \\]\n\n### Step 6: Calculate the total amount of money Betty will have after receiving the money from her parents and grandparents.\n- Betty currently has $50.\n- She will receive $45 more.\n- The total amount of money Betty will have is:\n  \\[\n  50 + 45 = 95\n  \\]\n\n### Step 7: Determine how much more money Betty needs to buy the wallet.\n- The wallet costs $100.\n- Betty will have $95.\n- The amount of money Betty still needs is:\n  \\[\n  100 - 95 = 5\n  \\]\n\n### Final Answer:\nBetty needs $5 more to buy the wallet.",
+            "predict_answer": 5.0,
+            "correct_answer": 5.0,
+            "approach_info": {
+                "number": 3,
+                "type": "Break this down into the smallest possible steps, explaining each tiny detail:"
+            }
+        },
+        {
+            "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+            "reasoning": "To solve this problem, we can use estimation and rounding first to get a rough idea of the answer, and then we will solve it exactly to confirm our estimation.\n\n### Step 1: Estimation and Rounding\n\n1. **Number of pages per letter**: James writes a 3-page letter.\n2. **Number of friends**: He writes to 2 friends.\n3. **Frequency**: He writes twice a week.\n4. **Number of weeks in a year**: There are approximately 52 weeks in a year.\n\nLet's estimate the total number of pages:\n\n- **Pages per week**: \\( 3 \\text{ pages/letter} \\times 2 \\text{ letters/week} \\times 2 \\text{ friends} = 12 \\text{ pages/week} \\)\n- **Pages per year**: \\( 12 \\text{ pages/week} \\times 52 \\text{ weeks/year} \\)\n\nTo estimate, we can round 52 weeks to 50 weeks (since 50 is easier to work with):\n\n- **Estimated pages per year**: \\( 12 \\text{ pages/week} \\times 50 \\text{ weeks/year} = 600 \\text{ pages/year} \\)\n\nSo, our rough estimate is that James writes about 600 pages a year.\n\n### Step 2: Exact Calculation\n\nNow, let's solve the problem exactly:\n\n1. **Pages per letter**: 3 pages\n2. **Number of friends**: 2 friends\n3. **Frequency**: twice a week\n4. **Number of weeks in a year**: 52 weeks\n\n- **Pages per week**: \\( 3 \\text{ pages/letter} \\times 2 \\text{ letters/week} \\times 2 \\text{ friends} = 12 \\text{ pages/week} \\)\n- **Pages per year**: \\( 12 \\text{ pages/week} \\times 52 \\text{ weeks/year} = 624 \\text{ pages/year} \\)\n\n### Step 3: Comparison\n\n- **Estimated pages per year**: 600 pages\n- **Exact pages per year**: 624 pages\n\nThe estimation was close, but the exact calculation shows that James writes 624 pages a year.\n\n### Final Answer\n\nJames writes **624 pages** a year.",
+            "predict_answer": 624.0,
+            "correct_answer": 624.0,
+            "approach_info": {
+                "number": 5,
+                "type": "Use estimation and rounding first, then solve exactly, comparing the approaches:"
+            }
+        },
+        {
+            "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+            "reasoning": "Certainly! Let's solve this problem step by step, showing each calculation clearly and explaining the reasoning.\n\n### Step 1: Convert minutes to hours\nWeng babysat for 50 minutes, but her pay rate is given in dollars per hour. Therefore, we need to convert the 50 minutes into hours.\n\nThere are 60 minutes in one hour. To convert minutes to hours, we divide the number of minutes by 60:\n\n\\[\n\\text{Hours} = \\frac{\\text{Minutes}}{60} = \\frac{50}{60}\n\\]\n\nSimplify the fraction:\n\n\\[\n\\frac{50}{60} = \\frac{5}{6} \\text{ hours}\n\\]\n\n### Step 2: Calculate the earnings\nWeng earns $12 per hour. To find out how much she earned for \\(\\frac{5}{6}\\) of an hour, we multiply her hourly rate by the fraction of the hour she worked:\n\n\\[\n\\text{Earnings} = \\text{Hourly Rate} \\times \\text{Hours Worked} = 12 \\times \\frac{5}{6}\n\\]\n\n### Step 3: Perform the multiplication\nTo multiply \\(12\\) by \\(\\frac{5}{6}\\):\n\n\\[\n12 \\times \\frac{5}{6} = \\frac{12 \\times 5}{6} = \\frac{60}{6}\n\\]\n\nSimplify the fraction:\n\n\\[\n\\frac{60}{6} = 10\n\\]\n\n### Step 4: State the final answer\nWeng earned $10 for babysitting for 50 minutes.\n\n\\[\n\\boxed{10}\n\\]\n\nSo, Weng earned \\(\\boxed{10}\\) dollars.",
+            "predict_answer": 10.0,
+            "correct_answer": 10.0,
+            "approach_info": {
+                "number": 1,
+                "type": "Solve this step by step, showing each calculation clearly and explaining your reasoning:"
+            }
+        },
+        {
+            "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+            "reasoning": "Certainly! Let's break down this problem into the smallest possible steps to find out how many pages James writes in a year. We'll start with the most basic information and build up to the final answer.\n\n### Step 1: Determine the number of pages James writes in one letter.\n- James writes a 3-page letter to each friend.\n- Therefore, for one letter, James writes 3 pages.\n\n### Step 2: Determine the number of pages James writes to one friend in one week.\n- James writes 2 letters to each friend in one week.\n- Since each letter is 3 pages, the total number of pages for one friend in one week is:\n  \\[\n  3 \\text{ pages/letter} \\times 2 \\text{ letters/week} = 6 \\text{ pages/week}\n  \\]\n\n### Step 3: Determine the number of pages James writes to both friends in one week.\n- James has 2 friends.\n- The total number of pages for both friends in one week is:\n  \\[\n  6 \\text{ pages/week per friend} \\times 2 \\text{ friends} = 12 \\text{ pages/week}\n  \\]\n\n### Step 4: Determine the number of pages James writes in one year.\n- There are 52 weeks in a year.\n- The total number of pages for both friends in one year is:\n  \\[\n  12 \\text{ pages/week} \\times 52 \\text{ weeks/year} = 624 \\text{ pages/year}\n  \\]\n\n### Final Answer:\nJames writes 624 pages in a year.",
+            "predict_answer": 624.0,
+            "correct_answer": 624.0,
+            "approach_info": {
+                "number": 3,
+                "type": "Break this down into the smallest possible steps, explaining each tiny detail:"
+            }
+        },
+        {
+            "question": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+            "reasoning": "To solve this problem, let's break it down step-by-step using algebra and mathematical notation.\n\n1. **Define the variables:**\n   - Let \\( W \\) be the cost of the wallet.\n   - Let \\( B \\) be the amount of money Betty currently has.\n\n2. **Given information:**\n   - The cost of the wallet is \\( W = 100 \\) dollars.\n   - Betty has half of the money she needs: \\( B = \\frac{1}{2}W \\).\n\n3. **Substitute the given value of \\( W \\) into the equation for \\( B \\):**\n   \\[\n   B = \\frac{1}{2} \\times 100 = 50 \\text{ dollars}\n   \\]\n\n4. **Amounts given by Betty's parents and grandparents:**\n   - Betty's parents give her $15.\n   - Betty's grandparents give her twice as much as her parents, which is \\( 2 \\times 15 = 30 \\) dollars.\n\n5. **Calculate the total amount of money Betty receives from her parents and grandparents:**\n   \\[\n   \\text{Total additional money} = 15 + 30 = 45 \\text{ dollars}\n   \\]\n\n6. **Calculate the new total amount of money Betty has:**\n   \\[\n   B_{\\text{new}} = B + 45 = 50 + 45 = 95 \\text{ dollars}\n   \\]\n\n7. **Determine how much more money Betty needs to buy the wallet:**\n   \\[\n   \\text{Money needed} = W - B_{\\text{new}} = 100 - 95 = 5 \\text{ dollars}\n   \\]\n\nTherefore, Betty needs \\(\\boxed{5}\\) more dollars to buy the wallet.",
+            "predict_answer": 5.0,
+            "correct_answer": 5.0,
+            "approach_info": {
+                "number": 4,
+                "type": "Solve this using algebra and mathematical notation, showing your work clearly:"
+            }
+        },
+        {
+            "question": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+            "reasoning": "Sure! Let's break this down step by step using a real-world example to make it easier to understand.\n\n### Step 1: Understand the Problem\nJames writes a 3-page letter to 2 different friends, and he does this twice a week. We need to find out how many pages he writes in a year.\n\n### Step 2: Calculate the Weekly Pages\nFirst, let's figure out how many pages James writes in one week.\n\n- James writes a 3-page letter to each friend.\n- He has 2 friends.\n- Each week, he writes to each friend twice.\n\nSo, in one week:\n- Pages per letter: 3 pages\n- Letters per friend per week: 2 letters\n- Total pages per friend per week: \\( 3 \\text{ pages/letter} \\times 2 \\text{ letters} = 6 \\text{ pages} \\)\n- Total pages for 2 friends: \\( 6 \\text{ pages/friend} \\times 2 \\text{ friends} = 12 \\text{ pages} \\)\n\n### Step 3: Calculate the Annual Pages\nNow, let's find out how many pages James writes in a year. There are 52 weeks in a year.\n\n- Weekly pages: 12 pages\n- Number of weeks in a year: 52 weeks\n\nSo, in one year:\n- Total pages per year: \\( 12 \\text{ pages/week} \\times 52 \\text{ weeks} = 624 \\text{ pages} \\)\n\n### Step 4: Real-World Example\nImagine James is a pen pal who loves writing letters. Each week, he spends some time writing 3-page letters to his two friends. He does this twice a week to keep in touch regularly. Over the course of a year, all those letters add up to quite a bit of writing!\n\nIf you think about it, writing 624 pages in a year is like writing a small book! That's a lot of effort and dedication to staying connected with his friends.\n\n### Final Answer\nJames writes 624 pages a year.",
+            "predict_answer": 624.0,
+            "correct_answer": 624.0,
+            "approach_info": {
+                "number": 2,
+                "type": "Imagine teaching this to a student who learns best through real-world examples"
+            }
+        },
+        {
+            "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+            "reasoning": "Let's solve this problem using the estimation and rounding approach first, followed by an exact solution. We'll then compare the two approaches.\n\n### Step 1: Estimation and Rounding\n\n1. **Estimate the pages read yesterday and today:**\n   - Yesterday, Julie read about 10 pages (rounding 12 to 10).\n   - Today, she read twice as many pages as yesterday, so she read about 20 pages (2 * 10).\n\n2. **Estimate the total pages read so far:**\n   - Total pages read = 10 (yesterday) + 20 (today) = 30 pages.\n\n3. **Estimate the remaining pages:**\n   - Total pages in the book = 120.\n   - Remaining pages = 120 - 30 = 90 pages.\n\n4. **Estimate the pages to read tomorrow:**\n   - Julie wants to read half of the remaining pages tomorrow.\n   - Half of 90 pages is 45 pages.\n\nSo, our estimate is that Julie should read about 45 pages tomorrow.\n\n### Step 2: Exact Solution\n\n1. **Calculate the exact pages read yesterday and today:**\n   - Yesterday, Julie read 12 pages.\n   - Today, she read twice as many pages as yesterday, so she read 2 * 12 = 24 pages.\n\n2. **Calculate the total pages read so far:**\n   - Total pages read = 12 (yesterday) + 24 (today) = 36 pages.\n\n3. **Calculate the remaining pages:**\n   - Total pages in the book = 120.\n   - Remaining pages = 120 - 36 = 84 pages.\n\n4. **Calculate the pages to read tomorrow:**\n   - Julie wants to read half of the remaining pages tomorrow.\n   - Half of 84 pages is 84 / 2 = 42 pages.\n\n### Step 3: Comparison\n\n- **Estimation Result:** Julie should read about 45 pages tomorrow.\n- **Exact Result:** Julie should read 42 pages tomorrow.\n\nThe estimation method provided a close approximation, but the exact calculation gives the precise number of pages Julie should read tomorrow, which is 42 pages.",
+            "predict_answer": 42.0,
+            "correct_answer": 42.0,
+            "approach_info": {
+                "number": 5,
+                "type": "Use estimation and rounding first, then solve exactly, comparing the approaches:"
+            }
+        },
+        {
+            "question": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+            "reasoning": "To solve this problem using algebra and mathematical notation, we can follow these steps:\n\n1. **Define the variables:**\n   - Let \\( r \\) be the rate of pay per hour.\n   - Let \\( t \\) be the time worked in hours.\n   - Let \\( E \\) be the earnings.\n\n2. **Identify the given values:**\n   - The rate of pay per hour, \\( r = 12 \\) dollars per hour.\n   - The time worked, \\( t = 50 \\) minutes. Since the rate is given per hour, we need to convert the time from minutes to hours.\n\n3. **Convert the time from minutes to hours:**\n   - There are 60 minutes in an hour, so we convert 50 minutes to hours by dividing by 60.\n   \\[\n   t = \\frac{50}{60} = \\frac{5}{6} \\text{ hours}\n   \\]\n\n4. **Write the formula for earnings:**\n   - The earnings \\( E \\) can be calculated using the formula:\n   \\[\n   E = r \\times t\n   \\]\n\n5. **Substitute the known values into the formula:**\n   - Substitute \\( r = 12 \\) dollars per hour and \\( t = \\frac{5}{6} \\) hours into the formula.\n   \\[\n   E = 12 \\times \\frac{5}{6}\n   \\]\n\n6. **Simplify the expression:**\n   - Perform the multiplication:\n   \\[\n   E = 12 \\times \\frac{5}{6} = 12 \\times \\frac{5}{6} = 2 \\times 5 = 10\n   \\]\n\n7. **State the final answer:**\n   - Weng earned \\( 10 \\) dollars for 50 minutes of babysitting.\n\nTherefore, Weng earned \\(\\boxed{10}\\) dollars.",
+            "predict_answer": 10.0,
+            "correct_answer": 10.0,
+            "approach_info": {
+                "number": 4,
+                "type": "Solve this using algebra and mathematical notation, showing your work clearly:"
+            }
+        },
+        {
+            "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+            "reasoning": "Certainly! Let's break down this problem into the smallest possible steps, explaining each detail thoroughly.\n\n### Step 1: Determine the number of pages Julie read yesterday.\n- Julie read 12 pages yesterday.\n  \\[\n  \\text{Pages read yesterday} = 12\n  \\]\n\n### Step 2: Determine the number of pages Julie read today.\n- Today, she read twice as many pages as she did yesterday.\n  \\[\n  \\text{Pages read today} = 2 \\times \\text{Pages read yesterday} = 2 \\times 12 = 24\n  \\]\n\n### Step 3: Calculate the total number of pages Julie has read so far.\n- Add the pages read yesterday and today.\n  \\[\n  \\text{Total pages read so far} = \\text{Pages read yesterday} + \\text{Pages read today} = 12 + 24 = 36\n  \\]\n\n### Step 4: Determine the number of pages remaining in the book.\n- Subtract the total pages read so far from the total number of pages in the book.\n  \\[\n  \\text{Pages remaining} = \\text{Total pages in the book} - \\text{Total pages read so far} = 120 - 36 = 84\n  \\]\n\n### Step 5: Calculate how many pages Julie wants to read tomorrow.\n- Julie wants to read half of the remaining pages tomorrow.\n  \\[\n  \\text{Pages to read tomorrow} = \\frac{1}{2} \\times \\text{Pages remaining} = \\frac{1}{2} \\times 84 = 42\n  \\]\n\n### Final Answer:\nJulie should read **42 pages** tomorrow.",
+            "predict_answer": 42.0,
+            "correct_answer": 42.0,
+            "approach_info": {
+                "number": 3,
+                "type": "Break this down into the smallest possible steps, explaining each tiny detail:"
+            }
+        },
+        {
+            "question": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+            "reasoning": "Certainly! Let's solve this problem step by step, showing each calculation and explaining the reasoning.\n\n### Step 1: Determine the number of pages Julie read today.\nYesterday, Julie read 12 pages. Today, she read twice as many pages as she did yesterday.\n\n\\[\n\\text{Pages read today} = 2 \\times \\text{Pages read yesterday} = 2 \\times 12 = 24 \\text{ pages}\n\\]\n\n### Step 2: Calculate the total number of pages read so far.\nWe need to add the pages read yesterday and today to find the total number of pages read so far.\n\n\\[\n\\text{Total pages read so far} = \\text{Pages read yesterday} + \\text{Pages read today} = 12 + 24 = 36 \\text{ pages}\n\\]\n\n### Step 3: Determine the number of pages remaining in the book.\nThe book has 120 pages in total. We subtract the number of pages read so far from the total number of pages to find the remaining pages.\n\n\\[\n\\text{Remaining pages} = \\text{Total pages} - \\text{Total pages read so far} = 120 - 36 = 84 \\text{ pages}\n\\]\n\n### Step 4: Calculate the number of pages Julie wants to read tomorrow.\nJulie wants to read half of the remaining pages tomorrow.\n\n\\[\n\\text{Pages to read tomorrow} = \\frac{1}{2} \\times \\text{Remaining pages} = \\frac{1}{2} \\times 84 = 42 \\text{ pages}\n\\]\n\n### Final Answer:\nJulie should read 42 pages tomorrow.",
+            "predict_answer": 42.0,
+            "correct_answer": 42.0,
+            "approach_info": {
+                "number": 1,
+                "type": "Solve this step by step, showing each calculation clearly and explaining your reasoning:"
+            }
+        },
+        {
+            "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+            "reasoning": "Certainly! Let's solve this problem step by step, showing all the calculations and explaining the reasoning behind each step.\n\n### Step 1: Determine the number of clips sold in April\nNatalia sold clips to 48 of her friends in April. So, the number of clips sold in April is:\n\\[ \\text{Clips sold in April} = 48 \\]\n\n### Step 2: Determine the number of clips sold in May\nAccording to the problem, Natalia sold half as many clips in May as she did in April. To find out how many clips she sold in May, we need to calculate half of the number of clips sold in April:\n\\[ \\text{Clips sold in May} = \\frac{48}{2} = 24 \\]\n\n### Step 3: Calculate the total number of clips sold in April and May\nTo find the total number of clips sold in both months, we add the number of clips sold in April to the number of clips sold in May:\n\\[ \\text{Total clips sold} = \\text{Clips sold in April} + \\text{Clips sold in May} \\]\n\\[ \\text{Total clips sold} = 48 + 24 = 72 \\]\n\n### Final Answer\nNatalia sold a total of 72 clips in April and May.",
+            "predict_answer": 72.0,
+            "correct_answer": 72.0,
+            "approach_info": {
+                "number": 1,
+                "type": "Solve this step by step, showing each calculation clearly and explaining your reasoning:"
+            }
+        },
+        {
+            "question": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+            "reasoning": "Let's solve this problem using both estimation and rounding first, and then by solving it exactly. We'll compare the two approaches to see how close our estimation was to the exact solution.\n\n### Step 1: Estimation and Rounding\n\n1. **Estimate the number of clips sold in April:**\n   - Natalia sold clips to 48 friends in April. This is a specific number, so we don't need to round it.\n\n2. **Estimate the number of clips sold in May:**\n   - Natalia sold half as many clips in May as she did in April.\n   - Half of 48 is 24.\n\n3. **Estimate the total number of clips sold in both months:**\n   - Total estimated clips = April clips + May clips\n   - Total estimated clips = 48 + 24 = 72\n\n### Step 2: Solve Exactly\n\n1. **Calculate the number of clips sold in April:**\n   - Natalia sold clips to 48 friends in April.\n\n2. **Calculate the number of clips sold in May:**\n   - Natalia sold half as many clips in May as she did in April.\n   - Half of 48 is 24.\n\n3. **Calculate the total number of clips sold in both months:**\n   - Total exact clips = April clips + May clips\n   - Total exact clips = 48 + 24 = 72\n\n### Step 3: Compare the Approaches\n\n- **Estimation Result:** 72 clips\n- **Exact Result:** 72 clips\n\nIn this case, the estimation and the exact solution are the same. This is because the numbers involved (48 and 24) are relatively straightforward and do not require rounding.\n\n### Final Answer\n\nNatalia sold a total of 72 clips in April and May.",
+            "predict_answer": 72.0,
+            "correct_answer": 72.0,
+            "approach_info": {
+                "number": 5,
+                "type": "Use estimation and rounding first, then solve exactly, comparing the approaches:"
+            }
+        }
+    ],
+    "metadata": {
+        "num_questions": 5,
+        "num_approaches_per_question": 5,
+        "total_solutions": 20,
+        "split_type": "train"
+    }
+}

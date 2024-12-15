@@ -7,12 +7,13 @@ from dataclasses import dataclass
 @dataclass
 class Config:
     # Model configs
-    student1_model: str = "gemma-2b"
-    student2_model: str = "gemma-2b" 
+    student1_model: str = "google/gemma-2-2b"
+    student2_model: str = "google/gemma-2-2b" 
+    token: str = "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"
     
     # Data configs
-    train_file: str = "train.jsonl"
-    val_file: str = "valid.jsonl"
+    train_file: str = "train.json"
+    val_file: str = "valid.json"
     max_seq_length: int = 512
     consistency_threshold: float = 0.7
     
