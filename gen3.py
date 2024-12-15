@@ -125,7 +125,7 @@ def get_api_key():
     from dotenv import load_dotenv
     import os
     load_dotenv()
-    return os.environ.get("OPENAI_API_KEY"), os.environ.get("DEEPINFRA_API_KEY")
+    return os.environ.get("DEEPINFRA_API_KEY")
 
 
 def main():
