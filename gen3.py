@@ -3,6 +3,7 @@ import openai
 import time
 import re
 from typing import List, Dict, Tuple
+from tqdm import tqdm
 
 def load_questions(file_path: str, start_idx: int, end_idx: int) -> List[Dict]:
    """Load questions from start_idx to end_idx from the GSM8K JSONL file."""
@@ -66,14 +67,12 @@ def get_diverse_solution(problem: str, answer_string: str, approach_num: int) ->
 
 def process_questions(questions: List[Dict], num_approaches: int = 5, start_idx: int = 0, end_idx: int = 8000) -> None:
    solutions = []
-   file_count = 200 # Start from batch 20 for questions 2001-4000 
+   file_count = 0
    total_solutions = 0
    
-   for q_idx, question in enumerate(questions):
-       print(f"\nProcessing question {q_idx + start_idx}/{end_idx}") # Adjusted indices
-       
-       for approach in range(num_approaches):
-           print(f"  Generating approach {approach + 1}/{num_approaches}...")
+   for q_idx, question in tqdm(enumerate(questions), total=len(questions), desc="Processing questions"):
+       # Inner progress bar for approaches
+       for approach in tqdm(range(num_approaches), total=num_approaches, desc=f"Q{q_idx + start_idx} approaches", leave=False):
            solution = get_diverse_solution(
                problem=question['question'],
                answer_string=question['answer'],
@@ -84,7 +83,7 @@ def process_questions(questions: List[Dict], num_approaches: int = 5, start_idx:
                total_solutions += 1
                
                if len(solutions) >= 100:
-                   output_file = f"gsm8k_solutions_batch_{file_count}.json"
+                   output_file = f"gsm8k_solutions_batch_{start_idx}_{file_count}.json"
                    with open(output_file, 'w') as f:
                        json.dump({
                            "pairs": solutions,
@@ -95,15 +94,15 @@ def process_questions(questions: List[Dict], num_approaches: int = 5, start_idx:
                                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
                            }
                        }, f, indent=2)
-                   print(f"Saved batch {file_count} ({len(solutions)} solutions) to {output_file}")
-                   print(f"Total solutions generated so far: {total_solutions}")
+                   tqdm.write(f"Saved batch {file_count} ({len(solutions)} solutions) to {output_file}")
+                   tqdm.write(f"Total solutions generated so far: {total_solutions}")
                    solutions = []
                    file_count += 1
-                   
-           time.sleep(0.25)
+               
+           time.sleep(1)
    
    if solutions:
-       output_file = f"gsm8k_solutions_batch_{file_count}.json"
+       output_file = f"data/gsm8k_solutions_batch_{start_idx}_{file_count}.json"
        with open(output_file, 'w') as f:
            json.dump({
                "pairs": solutions,
@@ -115,8 +114,6 @@ def process_questions(questions: List[Dict], num_approaches: int = 5, start_idx:
                }
            }, f, indent=2)
        print(f"Saved final batch {file_count} ({len(solutions)} solutions) to {output_file}")
-   
-   print(f"\nProcessing complete! Generated {total_solutions} total solutions across {file_count - 19} files")
 
 def get_api_key():
     """
@@ -127,22 +124,27 @@ def get_api_key():
     load_dotenv()
     return os.environ.get("DEEPINFRA_API_KEY")
 
+import argparse
 
 def main():
+    parser = argparse.ArgumentParser(description='Process GSM8K questions with multiple approaches')
+    parser.add_argument('--start-idx', type=int, required=True, help='Starting index for questions')
+    parser.add_argument('--end-idx', type=int, required=True, help='Ending index for questions')
+    args = parser.parse_args()
 
-   openai.api_key = get_api_key()
-   openai.api_base = "https://api.deepinfra.com/v1/openai"
-   
-   START_IDX = 4000  # Start from question 2001
-   END_IDX = 4000 + 3400   # End at question 4000
-   NUM_APPROACHES = 5
-   
-   file_path = "data/train.jsonl"
-   
-   questions = load_questions(file_path, START_IDX, END_IDX)
-   print(f"Loaded questions {START_IDX + 1} to {END_IDX}")
-   
-   process_questions(questions, NUM_APPROACHES, START_IDX, END_IDX)
+    openai.api_key = get_api_key()
+    openai.api_base = "https://api.deepinfra.com/v1/openai"
+    
+    START_IDX = args.start_idx
+    END_IDX = args.end_idx
+    NUM_APPROACHES = 5
+    
+    file_path = "data/train.jsonl"
+    
+    questions = load_questions(file_path, START_IDX, END_IDX)
+    print(f"Loaded questions {START_IDX + 1} to {END_IDX}")
+    
+    process_questions(questions, NUM_APPROACHES, START_IDX, END_IDX)
 
 if __name__ == "__main__":
-   main()
+    main()
