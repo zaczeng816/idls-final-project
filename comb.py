@@ -37,17 +37,18 @@ paths.sort(key=sort_key)
 for batch_file in sorted(paths):
     with open(batch_file, 'r') as f:
         batch_data = json.load(f)
-        batch_number = batch_data["metadata"]["batch_number"]
         
         # Track global question index
         question_tracker = {}  # Tracks question_text -> question_number mapping
         
         for pair in batch_data["pairs"]:
             question_text = pair["question"]
+            question_number = q_to_idx[question_text]
             
+            batch_number = question_number//20
             # Add the entry for this solution pair
             all_entries.append({
-                "question_number": q_to_idx[question_text],
+                "question_number": question_number,
                 "batch_number": batch_number,
                 "question": question_text,
                 "reasoning": pair["reasoning"],
