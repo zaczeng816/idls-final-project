@@ -4,6 +4,7 @@ import time
 import re
 from typing import List, Dict, Tuple
 from tqdm import tqdm
+import multiprocessing as mp
 
 def load_questions(file_path: str, start_idx: int, end_idx: int) -> List[Dict]:
    """Load questions from start_idx to end_idx from the GSM8K JSONL file."""
@@ -124,27 +125,47 @@ def get_api_key():
     load_dotenv()
     return os.environ.get("DEEPINFRA_API_KEY")
 
-import argparse
-
-def main():
-    parser = argparse.ArgumentParser(description='Process GSM8K questions with multiple approaches')
-    parser.add_argument('--start-idx', type=int, required=True, help='Starting index for questions')
-    parser.add_argument('--end-idx', type=int, required=True, help='Ending index for questions')
-    args = parser.parse_args()
-
+def process_range(start_idx: int, end_idx: int, num_approaches: int = 5) -> None:
+    """Function to handle a range of questions"""
     openai.api_key = get_api_key()
     openai.api_base = "https://api.deepinfra.com/v1/openai"
     
-    START_IDX = args.start_idx
-    END_IDX = args.end_idx
-    NUM_APPROACHES = 5
+    questions = load_questions("data/train.jsonl", start_idx, end_idx)
+    print(f"Process {mp.current_process().name}: Loaded questions {start_idx} to {end_idx}")
     
-    file_path = "data/train.jsonl"
+    process_questions(questions, num_approaches, start_idx, end_idx)
+
+def split_range(start: int, end: int, num_processes: int) -> List[Tuple[int, int]]:
+    """Split a range into approximately equal chunks"""
+    chunk_size = (end - start) // num_processes
+    ranges = []
+    for i in range(num_processes):
+        chunk_start = start + (i * chunk_size)
+        chunk_end = chunk_start + chunk_size if i < num_processes - 1 else end
+        ranges.append((chunk_start, chunk_end))
+    return ranges
+
+def main():
+    NUM_PROCESSES = 5
+    TOTAL_START = 4000
+    TOTAL_END = 7400
     
-    questions = load_questions(file_path, START_IDX, END_IDX)
-    print(f"Loaded questions {START_IDX + 1} to {END_IDX}")
+    # Split the range into chunks
+    ranges = split_range(TOTAL_START, TOTAL_END, NUM_PROCESSES)
     
-    process_questions(questions, NUM_APPROACHES, START_IDX, END_IDX)
+    # Create and start processes
+    processes = []
+    for start, end in ranges:
+        p = mp.Process(target=process_range, args=(start, end))
+        processes.append(p)
+        p.start()
+        print(f"Started process for range {start}-{end}")
+    
+    # Wait for all processes to complete
+    for p in processes:
+        p.join()
+    
+    print("All processes completed!")
 
 if __name__ == "__main__":
     main()
