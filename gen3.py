@@ -118,11 +118,19 @@ def process_questions(questions: List[Dict], num_approaches: int = 5) -> None:
    
    print(f"\nProcessing complete! Generated {total_solutions} total solutions across {file_count - 19} files")
 
+def get_api_key():
+    """
+    Loads the API keys from the .env file
+    """
+    from dotenv import load_dotenv
+    import os
+    load_dotenv()
+    return os.environ.get("OPENAI_API_KEY"), os.environ.get("DEEPINFRA_API_KEY")
+
+
 def main():
-   from dotenv import load_dotenv
-   import os
-   load_dotenv()
-   openai.api_key = os.environ.get("OPENAI_API_KEY")
+
+   openai.api_key = get_api_key()
    openai.api_base = "https://api.deepinfra.com/v1/openai"
    
    START_IDX = 4000  # Start from question 2001
