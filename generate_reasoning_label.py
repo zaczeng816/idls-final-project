@@ -3,30 +3,6 @@ import openai
 import time
 import re
 from typing import List, Dict, Tuple
-from tqdm import tqdm
-import multiprocessing as mp
-
-def load_questions(file_path: str, start_idx: int, end_idx: int) -> List[Dict]:
-   """Load questions from start_idx to end_idx from the GSM8K JSONL file."""
-   questions = []
-   with open(file_path, 'r') as f:
-       for i, line in enumerate(f):
-           if i >= end_idx:
-               break
-           if i >= start_idx:
-               questions.append(json.loads(line.strip()))
-   return questions
-
-def extract_numeric_answer(reasoning: str) -> Tuple[str, float]:
-   """Extract the last number from the reasoning text."""
-   numbers = re.findall(r'\d+', reasoning)
-   return reasoning, float(numbers[-1]) if numbers else None
-
-def extract_correct_answer(answer_string: str) -> float:
-   """Extract the numeric answer from the GSM8K answer string."""
-   numbers = re.findall(r'\d+', answer_string)
-   return float(numbers[-1]) if numbers else None
-
 
 example_question = "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"
 example_reasonings = [ 
