@@ -107,8 +107,7 @@ for idx, line in tqdm(enumerate(lines), total=len(lines), desc="Evaluating GSM8K
     else:
         error = None
         errors.append(error)
-    else:
-        error = None
+
         
     # Store results
     result = {
