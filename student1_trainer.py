@@ -1,97 +1,138 @@
-import torch
-from transformers import (
-    AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments,
-    DataCollatorForSeq2Seq
-)
-from peft import get_peft_model, LoraConfig, TaskType
-from config import Config, ReasoningExample, ConsistencyProcessor
-from typing import Dict, List
-import evaluate
-import numpy as np
 import json
+import torch
+from torch.utils.data import Dataset, DataLoader
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    TrainingArguments,
+    Trainer,
+    set_seed
+)
+from peft import (
+    LoraConfig,
+    get_peft_model,
+    prepare_model_for_kbit_training,
+    TaskType
+)
 from huggingface_hub import login
-import wandb
-wandb.init(mode="offline")
 
-class Student1Dataset(torch.utils.data.Dataset):
-    def __init__(self, examples: List[ReasoningExample], tokenizer):
-        self.examples = examples
+# Set random seed
+set_seed(42)
+
+# Login to Hugging Face
+token = "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"
+login(token)
+
+class MathReasoningDataset(Dataset):
+    def __init__(self, json_file, tokenizer, max_length=512):
+        with open(json_file, 'r') as f:
+            data = json.load(f)
+        
+        # Filter valid examples
+        self.data = [
+            item for item in data 
+            if item['predict_answer'] == item['correct_answer']
+        ]
+        
+        print(f"Loaded {len(data)} total examples")
+        print(f"Kept {len(self.data)} examples with correct predictions")
+        print(f"Filtered out {len(data) - len(self.data)} incorrect examples")
+        
         self.tokenizer = tokenizer
-        
-    def __len__(self):
-        return len(self.examples)
+        self.max_length = max_length
     
-    def __getitem__(self, idx) -> Dict:
-        ex = self.examples[idx]
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        item = self.data[idx]
         
-        # Format for reasoning generation
-        prompt = f"Question: {ex.question}\nGenerate step-by-step reasoning:"
-        target = f"\n{ex.reasoning}"
+        input_text = f"Question: {item['question']}\nLet's solve this step by step:"
+        target_text = f"{item['reasoning']}\nThe answer is {item['predict_answer']}"
         
-        # Tokenize
-        prompt_ids = self.tokenizer.encode(prompt)
-        target_ids = self.tokenizer.encode(target, add_special_tokens=False)
+        full_text = f"{input_text}{target_text}"
         
-        # Combine for causal LM
-        input_ids = prompt_ids + target_ids
+        encodings = self.tokenizer(
+            full_text,
+            truncation=True,
+            max_length=self.max_length,
+            padding="max_length",
+            return_tensors="pt"
+        )
         
-        # Create labels
-        labels = [-100] * len(prompt_ids) + target_ids
+        labels = encodings.input_ids.clone()
         
         return {
-            "input_ids": input_ids,
-            "attention_mask": [1] * len(input_ids),
-            "labels": labels
+            "input_ids": encodings.input_ids[0],
+            "attention_mask": encodings.attention_mask[0],
+            "labels": labels[0]
         }
 
-def load_data(file_path: str) -> List[ReasoningExample]:
-    with open(file_path) as f:
-        data = [json.loads(line) for line in f]
-    examples = [ReasoningExample(item) for item in data]
+def main():
+    # Model and tokenizer initialization
+    model_name = "google/gemma-2b"
+    print("Loading model and tokenizer...")
     
-    # # Apply consistency filtering
-    # processor = ConsistencyProcessor()
-    # filtered = processor.filter_dataset(examples)
-    # return filtered
-
-    return examples
-
-
-def train_student1(config: Config):
-    # Initialize model and tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(config.student1_model)
-    model = AutoModelForCausalLM.from_pretrained(config.student1_model)
-
-    # Add LoRA to the model
-    lora_config = LoraConfig(
-        task_type=TaskType.CAUSAL_LM, 
-        r=8,                          # LoRA rank
-        lora_alpha=32,                # Scaling factor
-        lora_dropout=0.1,             # Dropout probability
-        inference_mode=False          # Training mode
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_name,
+        trust_remote_code=True
     )
+    tokenizer.pad_token = tokenizer.eos_token
+    
+    # Load model in 8-bit
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        trust_remote_code=True,
+        device_map="auto",
+        load_in_8bit=True,
+    )
+
+    # Configure LoRA
+    lora_config = LoraConfig(
+        r=16,  # rank
+        lora_alpha=32,  # scaling factor
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+        lora_dropout=0.05,
+        bias="none",
+        task_type=TaskType.CAUSAL_LM
+    )
+
+    # Prepare model for training
+    model = prepare_model_for_kbit_training(model)
     model = get_peft_model(model, lora_config)
+    model.print_trainable_parameters()
     
-    # Load and process data
-    train_examples = load_data(config.train_file)
-    val_examples = load_data(config.val_file)
+    # Prepare dataset
+    dataset = MathReasoningDataset('datasets/flattened_gsm8k_questions.json', tokenizer)
     
-    # Create datasets
-    train_dataset = Student1Dataset(train_examples, tokenizer)
-    val_dataset = Student1Dataset(val_examples, tokenizer)
+    # Split dataset
+    train_size = int(0.9 * len(dataset))
+    val_size = len(dataset) - train_size
+    train_dataset, val_dataset = torch.utils.data.random_split(
+        dataset, [train_size, val_size]
+    )
     
     # Training arguments
     training_args = TrainingArguments(
-        output_dir=config.output_dir_student1,
-        learning_rate=config.learning_rate,
-        num_train_epochs=config.num_train_epochs,
-        per_device_train_batch_size=config.batch_size,
-        gradient_accumulation_steps=config.gradient_accumulation_steps,
+        output_dir="./gemma-math-reasoning-lora",
+        num_train_epochs=3,
+        per_device_train_batch_size=4,
+        per_device_eval_batch_size=4,
+        gradient_accumulation_steps=4,
         evaluation_strategy="steps",
-        eval_steps=500,
-        save_steps=500,
+        eval_steps=100,
+        logging_dir='./logs',
+        logging_steps=10,
+        learning_rate=2e-4,  # Higher learning rate for LoRA
+        weight_decay=0.01,
+        fp16=True,
+        save_strategy="steps",
+        save_steps=100,
+        save_total_limit=3,
         load_best_model_at_end=True,
-        fp16=False
+        metric_for_best_model="eval_loss",
+        report_to="tensorboard",
+        warmup_steps=100,
     )
     
     # Initialize trainer
@@ -100,30 +141,37 @@ def train_student1(config: Config):
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=val_dataset,
-        tokenizer=tokenizer,
-        # compute_metrics=lambda eval_preds: compute_metrics(eval_preds, tokenizer),
-        data_collator=DataCollatorForSeq2Seq(tokenizer, model=model)
     )
     
-    # Train and save
+    # Start training
+    print("Starting training...")
     trainer.train()
-    trainer.save_model(config.output_dir_student1)
-
-    # Evaluate
-    eval_results = trainer.evaluate()
-    print("Evaluation Results:")
-    for key, value in eval_results.items():
-        print(f"{key}: {value}")
     
-    return trainer
+    # Save the final model
+    print("Saving model...")
+    model.save_pretrained("./gemma-math-reasoning-lora-final")
+    tokenizer.save_pretrained("./gemma-math-reasoning-lora-final")
+    
+    print("Training complete!")
+
+# Function to generate predictions
+def generate_prediction(model, tokenizer, question, max_length=512):
+    input_text = f"Question: {question}\nLet's solve this step by step:"
+    inputs = tokenizer(input_text, return_tensors="pt").to(model.device)
+    
+    outputs = model.generate(
+        **inputs,
+        max_length=max_length,
+        num_return_sequences=1,
+        temperature=0.7,
+        do_sample=True,
+        pad_token_id=tokenizer.eos_token_id
+    )
+    
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 if __name__ == "__main__":
-    config = Config()
-
-    # Authenticate with the Hugging Face Hub
-    token = config.token
-    login(token=token)
-    print("Logged in successfully!")
-
-    # Train model
-    trainer = train_student1(config)
+    try:
+        main()
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
