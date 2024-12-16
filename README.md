@@ -12,16 +12,16 @@ Framework for teaching mathematical reasoning to small language models through k
 
 - `dataset/`: Contains training and evaluation datasets
 - `models/gemma-math-reasoning-lora-final/`: Model architecture and weights
-- `baseline_test.py`: Baseline model evaluation script
 - `config.py`: Configuration settings
 - `data_prepare.py`: Data preprocessing utilities
 - `data_comb.py`: Data combination utilities
+- `data_student1.py`: Data generation for labelling training
 - `generate_reasoning_label.py`: Script for generating reasoning labels
 - `inference.py`: Model inference pipeline
-- `student1_inference.py`: Student model 1 inference code
 - `student1_trainer.py`: Training script for student model 1 
 - `student2_trainer.py`: Training script for student model 2
-- `statge1_eval.py`: Stage 1 evaluation metrics
+- `eval_baseline.py`: Baseline model evaluation script
+- `eval_student1.py`: Stage 1 evaluation metrics
 - `tuned_student1_demo.ipynb`: Demo notebook for tuned student model
 
 ## Setup
