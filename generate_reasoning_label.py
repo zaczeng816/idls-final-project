@@ -3,6 +3,7 @@ import openai
 import time
 import re
 from typing import List, Dict, Tuple
+from tqdm import tqdm
 
 example_question = "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"
 example_reasonings = [ 
@@ -92,12 +93,43 @@ if __name__ == "__main__":
     openai.api_key = get_api_key()
     openai.api_base = "https://api.deepinfra.com/v1/openai"
 
-    result = get_reasoning_label(example_question, example_reasonings, debug=True)
-    if result:
-        print("\nScores for each reasoning:")
-        for i, (score, reasoning) in enumerate(zip(result["scores"], result["reasonings"])):
-            print(f"\nSolution {i+1} Score: {score}")
-            print(f"First 100 chars: {reasoning[:100]}...")
-        print(f"\nBest reasoning score: {max(result['scores'])}")
-    else:
-        print("Failed to generate scores")
+    # First, calculate total number of unique questions
+    def count_unique_questions(data):
+        i = 0
+        count = 0
+        while i < len(data):
+            count += 1
+            j = i
+            while j + 1 < len(data) and data[j+1]['question'] == data[i]['question']:
+                j += 1
+            i = j + 1
+        return count
+
+    # Then modify the main loop with tqdm
+    with open('dataset/flattened_gsm8k_questions.json', 'r') as file:
+        data = json.load(file)
+        total_questions = count_unique_questions(data)
+        i = 0
+        data_with_labels = []
+        
+        # Create progress bar
+        with tqdm(total=total_questions, desc="Processing questions") as pbar:
+            while i < len(data):
+                j = i
+                while j + 1< len(data) and data[j+1]['question'] == data[i]['question']:
+                    j += 1
+                cur_data = data[i:j+1]
+
+                result = get_reasoning_label(cur_data[0]['question'], [d['reasoning'] for d in cur_data], debug=True)
+                if result:
+                    for (i, d) in enumerate(cur_data):
+                        cur_data[i]['reasoning_score'] = result['scores'][i]
+                        cur_data[i]['best_reasoning'] = result['best_reasoning']
+                    data_with_labels += cur_data
+                i = j + 1
+                
+                pbar.update(1)
+                if i % 1000 == 0:
+                    json.dump({"pairs": data_with_labels}, open('dataset/gsm8k_reasoning_labels.json', 'w'), indent=2)
+        json.dump({"pairs": data_with_labels}, open('dataset/gsm8k_reasoning_labels.json', 'w'), indent=2)
+
