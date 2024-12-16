@@ -21,7 +21,7 @@ class Config:
     learning_rate: float = 3e-5
     num_train_epochs: int = 3
     batch_size: int = 4
-    gradient_accumulation_steps: int = 4
+    gradient_accumulation_steps: int = 8
     
     # Paths
     output_dir_student1: str = "./student1_model"
