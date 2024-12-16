@@ -10,8 +10,8 @@ Framework for teaching mathematical reasoning to small language models through k
 
 ## Repository Structure
 
-- `dataset/`: Contains training and evaluation datasets
-- `models/gemma-math-reasoning-lora-final/`: Model architecture and weights
+- `datasets/`: Contains training and evaluation datasets
+- `models/`: Model architecture and weights
 - `config.py`: Configuration settings
 - `data_prepare.py`: Data preprocessing utilities
 - `data_comb.py`: Data combination utilities
