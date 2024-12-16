@@ -1,0 +1,7 @@
+torch>=1.13.0
+transformers>=4.30.0
+peft>=0.4.0
+evaluate>=0.4.0
+numpy>=1.21.0
+wandb>=0.15.0
+huggingface-hub>=0.16.0
