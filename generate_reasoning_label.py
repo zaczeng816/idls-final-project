@@ -47,35 +47,81 @@ def get_api_key():
     return os.environ.get("DEEPINFRA_API_KEY")
 
 
-def get_reasoning_label(problem: str, reasonings: List[str]) -> Dict:
-   system_prompt = ""
-   prompt = ""
-   scores = []
-   try:
-       response = openai.ChatCompletion.create(
-           model="Qwen/Qwen2.5-72B-Instruct",
-           messages=[
-               {"role": "system", "content": system_prompt},
-               {"role": "user", "content": prompt}
-           ],
-           temperature=0.7,
-       )
-       
-       reasoning = response.choices[0].message["content"]
-       best_reasoning = reasonings[scores.index(max(scores))]
+def get_reasoning_label(problem: str, reasonings: List[str], debug = False) -> Dict:
+    system_prompt = """You are an expert math teacher evaluating different solution approaches. 
+    Rate each solution on a scale of 1-5 based on:
+    - Clarity of explanation
+    - Mathematical accuracy
+    - Step-by-step breakdown
+    - Logical flow
+    
+    Provide ONLY numerical scores in this format:
+    [score1, score2, score3, ...]"""
 
-       return {
-           "question": problem,
-           "reasonings": reasonings,
-           "best_reasoning": best_reasoning,
-           "scores": scores,
-       }
-   except Exception as e:
-       print(f"Error generating score for question: {problem}: {str(e)}")
-       return None
+    prompt = f"""Question: {problem}
+
+Here are {len(reasonings)} different solution approaches. Rate each one on a scale of 1-5:
+
+{'-' * 50}
+""" + "\n\n".join(f"Solution {i+1}:\n{reasoning}" for i, reasoning in enumerate(reasonings))
+
+    scores = []
+    try:
+        response = openai.ChatCompletion.create(
+            model="Qwen/Qwen2.5-72B-Instruct",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+        )
+        
+        if debug:
+            print("DEBUG:response: ", response)
+        
+        # Extract scores from response
+        response_text = response.choices[0].message["content"]
+        
+        # Parse scores safely using regex
+        try:
+            # Look for list pattern [n, n, n, ...]
+            import re
+            score_matches = re.findall(r'\d+(?:\.\d+)?', response_text)
+            scores = [float(score) for score in score_matches[:len(reasonings)]]
+            
+            # Validate scores
+            if len(scores) != len(reasonings):
+                raise ValueError(f"Expected {len(reasonings)} scores, got {len(scores)}")
+            if not all(1 <= score <= 5 for score in scores):
+                raise ValueError("Scores must be between 1 and 5")
+                
+        except Exception as e:
+            print(f"Error parsing scores: {str(e)}")
+            return None
+
+        best_reasoning = reasonings[scores.index(max(scores))]
+
+        return {
+            "question": problem,
+            "reasonings": reasonings,
+            "best_reasoning": best_reasoning,
+            "scores": scores,
+            "raw_response": response_text  # Include for debugging
+        }
+    except Exception as e:
+        print(f"Error generating score for question: {problem}: {str(e)}")
+        return None
 
 if __name__ == "__main__":
     openai.api_key = get_api_key()
     openai.api_base = "https://api.deepinfra.com/v1/openai"
 
-    print(get_reasoning_label(example_question, example_reasonings))
+    result = get_reasoning_label(example_question, example_reasonings, debug=True)
+    if result:
+        print("\nScores for each reasoning:")
+        for i, (score, reasoning) in enumerate(zip(result["scores"], result["reasonings"])):
+            print(f"\nSolution {i+1} Score: {score}")
+            print(f"First 100 chars: {reasoning[:100]}...")
+        print(f"\nBest reasoning score: {max(result['scores'])}")
+    else:
+        print("Failed to generate scores")
