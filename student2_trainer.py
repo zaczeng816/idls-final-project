@@ -101,6 +101,7 @@ def train_student2(config: Config):
         torch_dtype=torch.float16,
         device_map="auto",
         use_cache=False,
+        cache_dir='../hf_models',
         return_dict=True
     )
     
