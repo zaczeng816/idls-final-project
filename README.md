@@ -46,6 +46,6 @@ Remark: The data with score labeled is not attached due to the cloud storage con
 
 
 ## Usage
-See tuned_student1_demo.ipynb for example usage and inference with trained student1 models. And tuned_students_demo.ipynb to see dual students inference.
+See tuned_student1_demo.ipynb for example usage and inference with trained student1 models. And demo.ipynb to see dual students inference.
 ![image](https://github.com/user-attachments/assets/6015e731-d636-40c7-af17-d9cf8f9695fc)
 
