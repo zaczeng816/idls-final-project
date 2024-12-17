@@ -42,6 +42,7 @@ python student1_trainer.py
 ```bash
 python student2_trainer.py
 ```
+Remark: The data with score labeled is not attached due to the cloud storage constraints.
 
 
 ## Usage
