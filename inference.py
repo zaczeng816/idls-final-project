@@ -1,133 +1,134 @@
+import json
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from config import Config
-from typing import List, Dict, Tuple
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
 import numpy as np
+from tqdm import tqdm
 
-class ReasoningPipeline:
-    def __init__(self, config: Config):
-        # Load student1 (reasoning generator)
-        self.student1_tokenizer = AutoTokenizer.from_pretrained(config.output_dir_student1)
-        self.student1_model = AutoModelForCausalLM.from_pretrained(config.output_dir_student1)
-        
-        # Load student2 (answer predictor)
-        self.student2_tokenizer = AutoTokenizer.from_pretrained(config.output_dir_student2)
-        self.student2_model = AutoModelForCausalLM.from_pretrained(config.output_dir_student2)
-        
-        self.config = config
-        
-    def generate_reasoning(self, question: str, num_paths: int = 5) -> List[str]:
-        """Generate multiple reasoning paths"""
-        prompt = f"Question: {question}\nGenerate step-by-step reasoning:"
-        
-        reasonings = []
-        for _ in range(num_paths):
-            inputs = self.student1_tokenizer(prompt, return_tensors="pt")
-            
-            # Generate with temperature sampling
-            outputs = self.student1_model.generate(
-                **inputs,
-                max_length=self.config.max_seq_length,
-                num_return_sequences=1,
-                temperature=0.7,
-                do_sample=True
-            )
-            
-            reasoning = self.student1_tokenizer.decode(outputs[0], skip_special_tokens=True)
-            reasonings.append(reasoning.split("Generate step-by-step reasoning:")[-1].strip())
-            
-        return reasonings
+def load_models():
+    # Load generator model (base model with LoRA for generation)
+    print("Loading generator model...")
+    BASE_MODEL_DIR = "google/gemma-2b"
+    LORA_ADAPTER_DIR = "models/gemma-math-reasoning-lora-final"
     
-    def predict_answer(self, question: str, reasoning: str) -> Tuple[float, float]:
-        """Predict answer with confidence score"""
-        prompt = f"Question: {question}\nReasoning:\n{reasoning}\nTherefore, the answer is:"
-        
-        inputs = self.student2_tokenizer(prompt, return_tensors="pt")
-        
-        # Generate answer
-        outputs = self.student2_model.generate(
-            **inputs,
-            max_length=50,
-            num_return_sequences=1,
-            output_scores=True,
-            return_dict_in_generate=True
-        )
-        
-        answer_text = self.student2_tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
-        answer_text = answer_text.split("Therefore, the answer is:")[-1].strip()
-        
-        try:
-            answer = float(answer_text)
-        except:
-            answer = 0.0
-            
-        # Calculate confidence from output scores
-        confidence = float(torch.mean(torch.stack(outputs.scores)).item())
-        
-        return answer, confidence
+    tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_DIR, trust_remote_code=True)
+    base_model = AutoModelForCausalLM.from_pretrained(
+        BASE_MODEL_DIR,
+        trust_remote_code=True,
+        device_map="auto"
+    )
+    generator = PeftModel.from_pretrained(base_model, LORA_ADAPTER_DIR)
+    generator = generator.merge_and_unload()
+    generator.eval()
     
-    def solve(self, question: str) -> Dict:
-        """Complete solving pipeline with self-consistency"""
-        # Generate multiple reasoning paths
-        reasonings = self.generate_reasoning(question, num_paths=5)
-        
-        # Get predictions and confidences
-        predictions = []
-        for reasoning in reasonings:
-            answer, confidence = self.predict_answer(question, reasoning)
-            predictions.append({
-                "reasoning": reasoning,
-                "answer": answer,
-                "confidence": confidence
-            })
-            
-        # Apply self-consistency
-        answers = [p["answer"] for p in predictions]
-        unique_answers = np.unique(answers)
-        
-        # Count occurrences and get confidences for each unique answer
-        answer_stats = {}
-        for ans in unique_answers:
-            occurrences = sum(1 for x in answers if abs(x - ans) < 1e-6)
-            confidences = [p["confidence"] for p in predictions 
-                         if abs(p["answer"] - ans) < 1e-6]
-            
-            answer_stats[ans] = {
-                "count": occurrences,
-                "avg_confidence": np.mean(confidences)
-            }
-            
-        # Select answer with highest count and confidence
-        final_answer = max(
-            answer_stats.items(),
-            key=lambda x: (x[1]["count"], x[1]["avg_confidence"])
-        )[0]
-        
-        # Get best reasoning for final answer
-        best_prediction = max(
-            [p for p in predictions if abs(p["answer"] - final_answer) < 1e-6],
-            key=lambda x: x["confidence"]
+    # Load scorer model
+    print("Loading scorer model...")
+    scorer = AutoModelForCausalLM.from_pretrained(
+        "models/student2_model/checkpoint-2000",
+        trust_remote_code=True,
+        device_map="auto"
+    )
+    scorer.eval()
+    
+    return generator, scorer, tokenizer
+
+def generate_answers(model, tokenizer, question, num_samples=5, max_length=512):
+    answers = []
+    
+    prompt = f"""Question: {question}
+Let's solve this step by step:"""
+    
+    input_ids = tokenizer(prompt, return_tensors="pt").input_ids.cuda()
+    
+    for _ in range(num_samples):
+        outputs = model.generate(
+            input_ids,
+            max_length=max_length,
+            temperature=0.7,
+            do_sample=True,
+            pad_token_id=tokenizer.pad_token_id,
+            num_return_sequences=1
         )
+        answer = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        # Remove the prompt from the answer
+        answer = answer.replace(prompt, "").strip()
+        answers.append(answer)
         
-        return {
-            "question": question,
-            "reasoning": best_prediction["reasoning"],
-            "answer": final_answer,
-            "confidence": best_prediction["confidence"]
-        }
+    return answers
+
+def score_answer(model, tokenizer, question, answer):
+    prompt = f"""Question: {question}
+Reasoning: {answer}
+Rate how likely this reasoning is correct:"""
+    
+    input_ids = tokenizer(prompt, return_tensors="pt").input_ids.cuda()
+    
+    with torch.no_grad():
+        outputs = model(input_ids)
+        logits = outputs.logits
+        
+    # Get score from the final token probabilities
+    final_logits = logits[0, -1]
+    score = torch.softmax(final_logits, dim=0).max().item()
+    
+    return score
 
 def main():
-    config = Config()
-    pipeline = ReasoningPipeline(config)
+    # Load models
+    generator, scorer, tokenizer = load_models()
     
-    # Example usage
-    question = "Bob can shuck 10 oysters in 5 minutes. How many oysters can he shuck in 2 hours?"
-    result = pipeline.solve(question)
+    # Load test questions
+    print("Loading test data...")
+    with open("datasets/test.jsonl", "r") as f:
+        test_data = [json.loads(line) for line in f]
+        
+    results = []
+    print("Processing questions...")
+    for item in tqdm(test_data):
+        question = item["question"]
+        true_answer = item["answer"]
+        
+        # Generate multiple answers
+        try:
+            candidate_answers = generate_answers(generator, tokenizer, question)
+            
+            # Score each answer
+            scores = []
+            for answer in candidate_answers:
+                score = score_answer(scorer, tokenizer, question, answer)
+                scores.append(score)
+                
+            # Select best answer
+            best_idx = np.argmax(scores)
+            best_answer = candidate_answers[best_idx]
+            
+            result = {
+                "question": question,
+                "answer": true_answer,
+                "predict_answer": best_answer
+            }
+            
+        except Exception as e:
+            print(f"Error processing question: {e}")
+            result = {
+                "question": question,
+                "answer": true_answer,
+                "predict_answer": "Error generating answer"
+            }
+            
+        results.append(result)
+        
+        # Save results periodically (every 50 questions)
+        if len(results) % 50 == 0:
+            with open("test_results.json", "w") as f:
+                json.dump(results, f, indent=2)
     
-    print(f"Question: {result['question']}")
-    print(f"\nReasoning:\n{result['reasoning']}")
-    print(f"\nAnswer: {result['answer']}")
-    print(f"Confidence: {result['confidence']:.3f}")
+    # Save final results
+    print("Saving final results...")
+    with open("test_results.json", "w") as f:
+        json.dump(results, f, indent=2)
+    
+    print("Done! Results saved to test_results.json")
 
 if __name__ == "__main__":
     main()
