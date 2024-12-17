@@ -23,6 +23,7 @@ Framework for teaching mathematical reasoning to small language models through k
 - `eval_baseline.py`: Baseline model evaluation script
 - `eval_student1.py`: Stage 1 evaluation metrics
 - `tuned_student1_demo.ipynb`: Demo notebook for tuned student model
+- `demo.ipynb`: Demo notebook for dual students inference
 
 ## Setup
 ### Install Requirements
