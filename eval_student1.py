@@ -4,6 +4,7 @@ from peft import PeftModel
 import json
 import numpy as np
 import re
+import time
 from tqdm import tqdm
 from rouge import Rouge
 from typing import List, Dict, Any, Optional, Tuple
@@ -13,6 +14,7 @@ LORA_ADAPTER_DIR = "./gemma-math-reasoning-lora-final"
 
 def setup_model():
     """Initialize model and tokenizer with LoRA weights."""
+    start_time = time.time()
     print("Loading the base model and tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_DIR, trust_remote_code=True)
     base_model = AutoModelForCausalLM.from_pretrained(
@@ -28,7 +30,10 @@ def setup_model():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model.to(device)
     
-    return model, tokenizer, device
+    setup_time = time.time() - start_time
+    print(f"Model setup time: {setup_time:.2f} seconds")
+    
+    return model, tokenizer, device, setup_time
 
 def extract_answer(output_text: str) -> Optional[int]:
     """Extracts the first integer that appears after 'The answer is'."""
@@ -52,14 +57,18 @@ def generate_predictions(
     num_samples: int = 1,
     max_length: int = 1024,
     temperature: float = 0.7
-) -> List[Dict[str, Any]]:
+) -> Tuple[List[Dict[str, Any]], float]:
     """Generates multiple step-by-step reasonings and extracts answers."""
     input_text = f"Question: {question}\nLet's solve this step by step:"
     inputs = tokenizer(input_text, return_tensors="pt").to(device)
     
     results = []
+    total_inference_time = 0
+    
     with torch.no_grad():
         for _ in range(num_samples):
+            # Measure inference time
+            start_time = time.time()
             outputs = model.generate(
                 **inputs,
                 max_length=max_length,
@@ -69,6 +78,8 @@ def generate_predictions(
                 top_p=0.95,
                 pad_token_id=tokenizer.eos_token_id
             )
+            inference_time = time.time() - start_time
+            total_inference_time += inference_time
             
             output_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
             reasoning = output_text.split("Let's solve this step by step:")[-1].strip()
@@ -76,10 +87,11 @@ def generate_predictions(
             
             results.append({
                 "reasoning": reasoning,
-                "predicted_answer": extracted_answer
+                "predicted_answer": extracted_answer,
+                "inference_time": inference_time
             })
     
-    return results
+    return results, total_inference_time
 
 def calculate_rouge_scores(predictions: List[Dict[str, Any]], reference: str) -> float:
     """Calculate ROUGE-L scores between predictions and reference."""
@@ -121,14 +133,16 @@ def evaluate_model(
         use_pass_k: Whether to calculate Pass@k metric
         output_path: Where to save the results
     """
-    model, tokenizer, device = setup_model()
+    model, tokenizer, device, setup_time = setup_model()
     results = []
     errors = []
     pass_k_results = []
     rouge_scores = []
+    total_inference_time = 0
+    inference_times = []
     
     with open(dataset_path, "r") as file:
-        lines = file.readlines()[:500]
+        lines = file.readlines()
     
     for idx, line in tqdm(enumerate(lines), total=len(lines), desc="Evaluating GSM8K"):
         data = json.loads(line)
@@ -136,10 +150,12 @@ def evaluate_model(
         answer_text = data['answer']
         correct_answer = extract_last_number(answer_text)
         
-        # Generate multiple predictions
-        predictions = generate_predictions(
+        # Generate multiple predictions and track time
+        predictions, batch_inference_time = generate_predictions(
             model, tokenizer, question, device, num_samples=num_samples
         )
+        total_inference_time += batch_inference_time
+        inference_times.append(batch_inference_time)
         
         # Calculate ROUGE-L score
         rouge_score = calculate_rouge_scores(predictions, answer_text)
@@ -163,7 +179,8 @@ def evaluate_model(
             "question": question,
             "correct_answer": correct_answer,
             "predictions": predictions,
-            "rouge_score": rouge_score
+            "rouge_score": rouge_score,
+            "inference_time": batch_inference_time
         }
         results.append(result)
     
@@ -172,10 +189,20 @@ def evaluate_model(
     accuracy = sum(1 for r in valid_predictions 
                   if r["predictions"][0]["predicted_answer"] == r["correct_answer"]) / len(valid_predictions) * 100
     
+    # Calculate timing metrics
+    avg_inference_time = np.mean(inference_times)
+    std_inference_time = np.std(inference_times)
+    
     metrics = {
         "accuracy": accuracy,
         "average_error": np.mean(errors) if errors else None,
-        "average_rouge_l": np.mean(rouge_scores) if rouge_scores else None
+        "average_rouge_l": np.mean(rouge_scores) if rouge_scores else None,
+        "model_setup_time": setup_time,
+        "total_inference_time": total_inference_time,
+        "average_inference_time": avg_inference_time,
+        "std_inference_time": std_inference_time,
+        "inference_time_per_sample": avg_inference_time / num_samples,
+        "throughput": len(lines) * num_samples / total_inference_time
     }
     
     if use_pass_k and num_samples > 1:
@@ -192,7 +219,13 @@ def evaluate_model(
     
     print("\nEvaluation Results:")
     for metric, value in metrics.items():
-        print(f"{metric}: {value:.4f}")
+        if "time" in metric or metric == "throughput":
+            if metric == "throughput":
+                print(f"{metric}: {value:.2f} samples/second")
+            else:
+                print(f"{metric}: {value:.2f} seconds")
+        else:
+            print(f"{metric}: {value:.4f}")
     
     return evaluation
 

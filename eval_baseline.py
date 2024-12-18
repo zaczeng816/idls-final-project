@@ -2,6 +2,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import json
 import re
+import time
 from typing import List, Dict, Any, Optional, Union, Tuple
 from rouge import Rouge
 from tqdm import tqdm
@@ -9,8 +10,6 @@ from huggingface_hub import login
 import numpy as np
 from dataclasses import dataclass
 from pathlib import Path
-
-
 
 @dataclass
 class EvaluationConfig:
@@ -20,7 +19,7 @@ class EvaluationConfig:
     output_file: str
     num_samples: int = 1
     use_pass_k: bool = False
-    max_length: int = 200
+    max_length: int = 1024
     temperature: float = 0.7
     top_p: float = 0.9
     hf_token: Optional[str] = None
@@ -48,7 +47,7 @@ def generate_reasoning_for_question(
     tokenizer: AutoTokenizer,
     question: str,
     config: EvaluationConfig
-) -> List[Dict[str, Any]]:
+) -> Tuple[List[Dict[str, Any]], float]:
     """
     Generate multiple reasoning outputs for a given question using a pre-trained model.
     
@@ -59,7 +58,7 @@ def generate_reasoning_for_question(
         config: Evaluation configuration
         
     Returns:
-        List of dictionaries containing reasoning and final answers
+        Tuple of (List of dictionaries containing reasoning and final answers, inference time in seconds)
     """
     prompt = (
         f"Question: {question}\n"
@@ -70,15 +69,19 @@ def generate_reasoning_for_question(
     
     input_ids = tokenizer.encode(prompt, return_tensors="pt").to(model.device)
     
-    outputs = model.generate(
-        input_ids,
-        max_length=config.max_length,
-        do_sample=True,
-        temperature=config.temperature,
-        top_p=config.top_p,
-        num_return_sequences=config.num_samples,
-        eos_token_id=tokenizer.encode("Final Answer:")[0]
-    )
+    # Measure inference time
+    start_time = time.time()
+    with torch.no_grad():
+        outputs = model.generate(
+            input_ids,
+            max_length=config.max_length,
+            do_sample=True,
+            temperature=config.temperature,
+            top_p=config.top_p,
+            num_return_sequences=config.num_samples,
+            eos_token_id=tokenizer.encode("Final Answer:")[0]
+        )
+    inference_time = time.time() - start_time
     
     results = []
     for output in outputs:
@@ -92,7 +95,7 @@ def generate_reasoning_for_question(
             "final_answer": final_answer
         })
     
-    return results
+    return results, inference_time
 
 def calculate_accuracy(results: List[Dict[str, Any]]) -> float:
     """Calculate accuracy of predictions."""
@@ -201,24 +204,32 @@ def evaluate_model(config: EvaluationConfig) -> Tuple[Dict[str, float], List[Dic
                 "answer": answer
             })
     
-    # Process questions
+    # Process questions and track inference times
     results = []
+    total_inference_time = 0
     with tqdm(total=len(questions), desc="Evaluating") as pbar:
         for pair in questions:
-            reasoning = generate_reasoning_for_question(model, tokenizer, pair["question"], config)
+            reasoning, inference_time = generate_reasoning_for_question(model, tokenizer, pair["question"], config)
+            total_inference_time += inference_time
             results.append({
                 "question": pair["question"],
                 "correct_answer": pair["correct_answer"],
                 "answer": pair["answer"],
-                "reasonings": reasoning
+                "reasonings": reasoning,
+                "inference_time": inference_time
             })
             pbar.update(1)
+    
+    # Calculate average inference time
+    avg_inference_time = total_inference_time / len(questions) if questions else 0
     
     # Calculate metrics
     metrics = {
         "accuracy": calculate_accuracy(results),
         "rouge_score": calculate_rouge_scores(results),
-        "average_error": calculate_error_metrics(results)
+        "average_error": calculate_error_metrics(results),
+        "average_inference_time": avg_inference_time,
+        "total_inference_time": total_inference_time
     }
     
     if config.use_pass_k and config.num_samples > 1:
@@ -227,7 +238,10 @@ def evaluate_model(config: EvaluationConfig) -> Tuple[Dict[str, float], List[Dic
     # Print results
     print("\nEvaluation Results:")
     for metric, value in metrics.items():
-        print(f"{metric}: {value:.4f}")
+        if "time" in metric:
+            print(f"{metric}: {value:.4f} seconds")
+        else:
+            print(f"{metric}: {value:.4f}")
     
     # Save results
     if config.output_file:
